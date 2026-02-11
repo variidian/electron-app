@@ -18,9 +18,11 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
 }).addTo(map);
 map.on('click', function(e) { {
 var zoom = map.getZoom();
-var point = map.project([lat, lng], zoom);
+var latLng = L.latLng([50.5, 30.5]);
+var point = map.project(latLng, zoom);
 var tileX = Math.floor(point.x / 256);
 var tileY = Math.floor(point.y / 256);
+console.log(tileX,tileY,zoom);
 } 
 });
 </script>
