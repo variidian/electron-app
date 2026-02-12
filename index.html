@@ -34,13 +34,17 @@ let imageurl = `https://mt1.google.com/vt/lyrs=s&x=${tileX}&y=${tileY}&z=${zoom}
 let image_elem = document.getElementById('map_image_elem')
 image_elem.src = imageurl;
 let img_array = await urltouint8array(`https://mt1.google.com/vt/lyrs=s&x=${tileX}&y=${tileY}&z=${zoom}`);
+let imgBuffer = Buffer.from(img_array); /* Uint8Array into an Electron nativeImage */
+let img_native = nativeImage.createFromBuffer(imgBuffer);
+let bitmapBuffer = img_native.toBitmap(); /*turn to bitmap pixel data with the rgba values*/
+let size = img_native.getSize(); 
+let expectedLength = size.width * size.height * 4; // 4 bytes per pixel (RGBA)
 })
-async function urltouint8array(url) { /*turn image url to buffer*/
+async function urltouint8array(url) { /*turn image url to int8 array*/
   const response = await axios.get(url, {
     responseType: 'arraybuffer'
   });
   return new Uint8Array(response.data);
-  /* return Buffer.from(response.data); turn array buffer to node js buffer*/
 }
 </script>
 </body>
