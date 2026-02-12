@@ -11,6 +11,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <div id="map" style="height:400px;"></div>
+<img id="map_image_elem">
 <script>
 var map = L.map('map').setView([0,173.737], 3);
 L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
@@ -18,13 +19,19 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
 }).addTo(map);
 map.on('click', function(e) { {
 var zoom = map.getZoom();
-var latLng = L.latLng([50.5, 30.5]);
+var latLng = e.latlng;
 var point = map.project(latLng, zoom);
 var tileX = Math.floor(point.x / 256);
 var tileY = Math.floor(point.y / 256);
 console.log(tileX,tileY,zoom);
-} 
+returnimg();
+}
+async function returnimg() {
+let imageurl = `https://mt1.google.com/vt/lyrs=s&x=${tileX}&y=${tileY}&z=${zoom}`;
+let image_elem = document.getElementById('map_image_elem')
+image_elem.src = imageurl;
+}
 });
 </script>
-  </body>
+</body>
 </html>
