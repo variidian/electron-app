@@ -1,11 +1,11 @@
 # Kolourmeans
 An application that turns locations selected on a satellite map into colour palettes.
 # How it works!
-- The interactive map uses the javascript library [Leaflet](https://leafletjs.com/)
-- The zoom and the equivalent tileX and tileY is calculated from the latitude and longitude of the location the user clicks in order to get the equivalent image url
-- [Axios](https://www.npmjs.com/package/axios) is used to turn the url of the image to a UInt8Array, then to an Electron nativeImage to turn into a bitmap of pixel data 
-- The rgba codes are added to an array with a for loop
-- further explanation here! k means clustering algorithm.
+- The interactive map uses the javascript library [Leaflet](https://leafletjs.com/).
+- [Axios](https://www.npmjs.com/package/axios) is used to turn the url of the image to a UInt8Array, then to an Electron nativeImage to turn into a bitmap of pixel data.
+- 5 random colours in the image are selected as centeroids.
+- Euclidean distance is used to calculate the distance between each rgb colour and each centeroid, then grouped together with the closest one to form clusters.
+- The centeroid is recalculated by averaging the points in the cluster.
 # Development
 1. Clone the repository
 ```
