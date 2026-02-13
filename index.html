@@ -44,15 +44,30 @@ for (let i = 0; i < bitmapBuffer.length; i += 4) { // stride of 4 to account for
     const a = bitmapBuffer[i + 3]; 
     colours.push([r, g, b]); // add to 'colours' array!
 }
-console.log(colours);
-function randomizecolours(colours) { //fisher-yates shuffle algorithm
-  for (let current_index = colours.length -1; current_index > 0; current_index--) { //start from the last in array and go backwards
+//fisher-yates shuffle algorithm
+for (let current_index = colours.length -1; current_index > 0; current_index--) { //start from the last in array and go backwards
     let random_index = Math.floor(Math.random() * (current_index + 1));
     [colours[current_index], colours[random_index]] = [colours[random_index], colours[current_index]]; //swap place
-
+}
+var centroids = [colours];
+centroids.slice(0,5); // if this is a function and 5 (amount of clusters/colours produced) = k then the user could choose how many colours in their palette.
+function euclidean_distance(rgb1,centroid) {
+    return Math.hypot(
+    rgb1[0] - centroid[0],
+    rgb1[1] - centroid[1],
+    rgb1[2] - centroid[2]
+  );
+}
+for (let current_index = colours.length -1; current_index > 0; current_index--) {
+  let distance1 = euclidean_distance(current_index,centroids[0]);
+  let distance2 = euclidean_distance(current_index,centroids[1]);
+  let distance3 = euclidean_distance(current_index,centroids[2]);
+  let distance4 = euclidean_distance(current_index,centroids[3]);
+  let distance5 = euclidean_distance(current_index,centroids[4]);
+  let centroid_distances = [distance1, distance2, distance3, distance4, distance5]
 }
 }
-})
+)
 async function urltouint8array(url) { /*turn image url to int8 array*/
   const response = await axios.get(url, {
     responseType: 'arraybuffer'
