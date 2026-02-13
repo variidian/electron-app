@@ -3,10 +3,10 @@
   <head>
     <link href="./output.css" rel="stylesheet">
     <meta charset="UTF-8" />
-    <title>Hallo!</title>
+    <title>kolourmeans</title>
   </head>
   <body class="bg-slate-900">
-<h1 class="text-center text-emerald-600 text-3xl mb-2 font-semibold font-mono">Heya! zoom into a point on the map and click it to generate a colour palette.</h1>
+<h1 class="text-center text-emerald-600 text-3xl mb-2 font-semibold font-mono">Heya! zoom into a point on the map and click to generate a colour palette based on the colours in your image.</h1>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -26,7 +26,6 @@ var latLng = click.latlng; /* latlng (latitude/longitude) and point gets the pla
 var point = map.project(latLng, zoom); 
 var tileX = Math.floor(point.x / 256);
 var tileY = Math.floor(point.y / 256); 
-console.log(tileX,tileY,zoom);
 let imageurl = `https://mt1.google.com/vt/lyrs=s&x=${tileX}&y=${tileY}&z=${zoom}`; /*showing the original img on the app*/
 let image_elem = document.getElementById('map_image_elem')
 image_elem.src = imageurl;
@@ -49,15 +48,15 @@ for (let current_index = colours.length -1; current_index > 0; current_index--) 
     let random_index = Math.floor(Math.random() * (current_index + 1));
     [colours[current_index], colours[random_index]] = [colours[random_index], colours[current_index]]; //swap place
 }
-var centroids = colours.slice(0,5); 
-function euclidean_distance(rgb1,centroid) {
+let centroids = colours.slice(0,5); //pick 5 random colours as centroids
+function euclidean_distance(rgb1,centroid) { // calculate distance between 1 colour and another 
     return Math.hypot(
     rgb1[0] - centroid[0],
     rgb1[1] - centroid[1],
     rgb1[2] - centroid[2]
   );
 }
-let centroidColors = [[], [], [], [], []];
+let centroidColours = [[], [], [], [], []]; 
 for (let current_index = colours.length -1; current_index > 0; current_index--) {
   let rgb = colours[current_index];
   let distance1 = euclidean_distance(rgb,centroids[0]);
@@ -66,11 +65,37 @@ for (let current_index = colours.length -1; current_index > 0; current_index--) 
   let distance4 = euclidean_distance(rgb,centroids[3]);
   let distance5 = euclidean_distance(rgb,centroids[4]);
   let centroid_distances = [distance1, distance2, distance3, distance4, distance5]
-  let minDistance = Math.min(...centroid_distances);
-  let minIndex = centroid_distances.indexOf(minDistance);
-  centroidColors[minIndex].push(rgb);
+  let minDistance = Math.min(...centroid_distances); //find the smallest number out of ^
+  let minIndex = centroid_distances.indexOf(minDistance); //find what index of the array the smallest number is
+  centroidColours[minIndex].push(rgb); // push the colour to the corresponding minindex array inside centroidcolors array 
 }
-console.log(centroidColors)
+console.log(centroidColours);
+let newCentroid = [];
+centroids = newCentroid;
+function new_centroid(cluster) {
+let rSum = 0;
+let gSum = 0;
+let bSum = 0;
+let count
+for (let i = 0; i < centroidColours[cluster].length; i ++) {
+  rSum += centroidColours[cluster][i][0];
+  gSum += centroidColours[cluster][i][1]; 
+  bSum += centroidColours[cluster][i][2]; 
+}
+count = centroidColours[cluster].length;
+let centroidy = 
+[Math.round(rSum / count),
+Math.round(gSum / count),
+Math.round(bSum / count)
+]
+newCentroid.push(centroidy);
+}
+new_centroid(0);
+new_centroid(1);
+new_centroid(2);
+new_centroid(3);
+new_centroid(4);
+console.log(newCentroid);
 }
 )
 async function urltouint8array(url) { /*turn image url to int8 array*/
