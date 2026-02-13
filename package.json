@@ -4,7 +4,7 @@
   "description": "my first electron app!",
   "repository": {
     "type": "git",
-    "url": "github.com/variidian/electron-app"
+    "url": "github.com/variidian/kolourmeans"
   },
   "license": "ISC",
   "author": "turdle",

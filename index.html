@@ -37,14 +37,21 @@ let bitmapBuffer = img_native.toBitmap(); /*turn to bitmap pixel data with the r
 let size = img_native.getSize(); 
 let expectedLength = size.width * size.height * 4; // 4 bytes per pixel (bgra)
 let colours = [];
-for (let i = 0; i < bitmapBuffer.length; i += 4) {
-    const b = bitmapBuffer[i];
+for (let i = 0; i < bitmapBuffer.length; i += 4) { // stride of 4 to account for b,g,r,a if I is smaller than the bytes amount in bitmapbuffer then + 4 and run again
+    const b = bitmapBuffer[i]; // i = multiple of 4 rounded down to the closest byte the loop is on.
     const g = bitmapBuffer[i + 1];
     const r = bitmapBuffer[i + 2];
     const a = bitmapBuffer[i + 3]; 
-    colours.push([r, g, b]);
+    colours.push([r, g, b]); // add to 'colours' array!
 }
 console.log(colours);
+function randomizecolours(colours) { //fisher-yates shuffle algorithm
+  for (let current_index = colours.length -1; current_index > 0; current_index--) { //start from the last in array and go backwards
+    let random_index = Math.floor(Math.random() * (current_index + 1));
+    [colours[current_index], colours[random_index]] = [colours[random_index], colours[current_index]]; //swap place
+
+}
+}
 })
 async function urltouint8array(url) { /*turn image url to int8 array*/
   const response = await axios.get(url, {
