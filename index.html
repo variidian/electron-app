@@ -11,7 +11,15 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <div id="map" style="height:400px;" class="border-4 border-emerald-600 m-4"></div>
+<div class="flex flex-row">
 <img id="map_image_elem" class="m-4 border-4 border-emerald-600">
+<div id="c1" class="p-6 mt-4"></div>
+<div id="c2" class="p-6 mt-4"></div>
+<div id="c3" class="p-6 mt-4"></div>
+<div id="c4" class="p-6 mt-4"></div>
+<div id="c5" class="p-6 mt-4"></div>
+</div>
+
 <script>
 const path = require('path') /*npm packages*/
 const axios = require("axios");
@@ -71,7 +79,6 @@ for (let current_index = colours.length -1; current_index > 0; current_index--) 
 }
 console.log(centroidColours);
 let newCentroid = [];
-centroids = newCentroid;
 function new_centroid(cluster) {
 let rSum = 0;
 let gSum = 0;
@@ -95,7 +102,16 @@ new_centroid(1);
 new_centroid(2);
 new_centroid(3);
 new_centroid(4);
+centroids = newCentroid;
 console.log(newCentroid);
+function rgbArrayToCss(rgb) {
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+document.getElementById("c1").style.backgroundColor = rgbArrayToCss(newCentroid[0]);
+document.getElementById("c2").style.backgroundColor = rgbArrayToCss(newCentroid[1]);
+document.getElementById("c3").style.backgroundColor = rgbArrayToCss(newCentroid[2]);
+document.getElementById("c4").style.backgroundColor = rgbArrayToCss(newCentroid[3]);
+document.getElementById("c5").style.backgroundColor = rgbArrayToCss(newCentroid[4]);
 }
 )
 async function urltouint8array(url) { /*turn image url to int8 array*/
