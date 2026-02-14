@@ -118,6 +118,55 @@ for (let i = 0; i < 5; i ++) {
   assign_cluster();
   reassign_centroids();
 }
+let LABcentroids = []
+function rgbToCielab(i) { // turn one colour to its cielab vers
+  function gammaCorrect(c) {
+  c = c / 255; // normalize from 0–255 to 0–1
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+  let l_r = gammaCorrect(centroids[i][0]); // rgb -> linear rgb
+  let l_g = gammaCorrect(centroids[i][1]);
+  let l_b = gammaCorrect(centroids[i][2]);
+  let x = l_r * 0.4124 + l_g * 0.3576 + l_b * 0.1805; // D65 matrix to get xyz colour
+  let y = l_r * 0.2126 + l_g * 0.7152 + l_b * 0.0722;
+  let z = l_r * 0.0193 + l_g * 0.1192 + l_b * 0.9505;
+  x *= 100;
+  y *= 100;
+  z *= 100;
+  let scaledx = x / 95.047; // scale against white, D65
+  let scaledy = y / 100;
+  let scaledz = z / 108.883;
+  let fX;
+  let fY;
+  let fZ;
+  if (scaledx > 0.008856) {
+     fX = Math.cbrt(scaledx);
+  }
+  else {
+     fX = scaledx * 7.787 + 0.13793103448;
+  }
+  if (scaledy > 0.008856) {
+     fY = Math.cbrt(scaledy);
+  }
+  else {
+     fY = scaledy * 7.787 + 0.13793103448;
+  }
+  if (scaledz > 0.008856) {
+     fZ = Math.cbrt(scaledz);
+  }
+  else {
+     fZ = scaledz * 7.787 + 0.13793103448;
+  }
+  let L = fY * 116 - 16;
+  let A = (fX - fY) * 500;
+  let B = (fY - fZ) * 200;
+  LABcentroids.push([L, A, B]);
+}
+for (let i = 0; i < centroids.length; i++) {
+  rgbToCielab(i);
+}
+console.log(LABcentroids);
+
 document.getElementById("c1").style.backgroundColor = rgbArrayToCss(newCentroid[0]);
 document.getElementById("c2").style.backgroundColor = rgbArrayToCss(newCentroid[1]);
 document.getElementById("c3").style.backgroundColor = rgbArrayToCss(newCentroid[2]);
