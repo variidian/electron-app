@@ -110,8 +110,8 @@ centroids = newCentroid;
 }
 
 console.log(newCentroid);
-function rgbArrayToCss(rgb) {
-  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+function labArrayToCss(lab) {
+  return `lab(${lab[0]} ${lab[1]} ${lab[2]})`;
 }
 reassign_centroids();
 for (let i = 0; i < 5; i ++) {
@@ -165,13 +165,14 @@ function rgbToCielab(i) { // turn one colour to its cielab vers
 for (let i = 0; i < centroids.length; i++) {
   rgbToCielab(i);
 }
+LABcentroids.sort((b, a) => a[0] - b[0]); //sort light -> dark
 console.log(LABcentroids);
 
-document.getElementById("c1").style.backgroundColor = rgbArrayToCss(newCentroid[0]);
-document.getElementById("c2").style.backgroundColor = rgbArrayToCss(newCentroid[1]);
-document.getElementById("c3").style.backgroundColor = rgbArrayToCss(newCentroid[2]);
-document.getElementById("c4").style.backgroundColor = rgbArrayToCss(newCentroid[3]);
-document.getElementById("c5").style.backgroundColor = rgbArrayToCss(newCentroid[4]);
+document.getElementById("c1").style.backgroundColor = labArrayToCss(LABcentroids[0]);
+document.getElementById("c2").style.backgroundColor = labArrayToCss(LABcentroids[1]);
+document.getElementById("c3").style.backgroundColor = labArrayToCss(LABcentroids[2]);
+document.getElementById("c4").style.backgroundColor = labArrayToCss(LABcentroids[3]);
+document.getElementById("c5").style.backgroundColor = labArrayToCss(LABcentroids[4]);
 }
 )
 async function urltouint8array(url) { /*turn image url to int8 array*/
