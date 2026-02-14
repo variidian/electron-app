@@ -64,8 +64,10 @@ function euclidean_distance(rgb1,centroid) { // calculate distance between 1 col
     rgb1[2] - centroid[2]
   );
 }
-let centroidColours = [[], [], [], [], []]; 
-for (let current_index = colours.length -1; current_index > 0; current_index--) {
+let centroidColours = [[], [], [], [], []];
+function assign_cluster() {
+  centroidColours = [[], [], [], [], []];
+for (let current_index = colours.length -1; current_index >= 0; current_index--) {
   let rgb = colours[current_index];
   let distance1 = euclidean_distance(rgb,centroids[0]);
   let distance2 = euclidean_distance(rgb,centroids[1]);
@@ -78,6 +80,8 @@ for (let current_index = colours.length -1; current_index > 0; current_index--) 
   centroidColours[minIndex].push(rgb); // push the colour to the corresponding minindex array inside centroidcolors array 
 }
 console.log(centroidColours);
+}
+assign_cluster();
 let newCentroid = [];
 function new_centroid(cluster) {
 let rSum = 0;
@@ -97,15 +101,22 @@ Math.round(bSum / count)
 ]
 newCentroid.push(centroidy);
 }
-new_centroid(0);
-new_centroid(1);
-new_centroid(2);
-new_centroid(3);
-new_centroid(4);
+function reassign_centroids() {
+  newCentroid = [];
+for (let i = 0; i < centroids.length; i ++) {
+  new_centroid(i);
+}
 centroids = newCentroid;
+}
+
 console.log(newCentroid);
 function rgbArrayToCss(rgb) {
   return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+reassign_centroids();
+for (let i = 0; i < 5; i ++) {
+  assign_cluster();
+  reassign_centroids();
 }
 document.getElementById("c1").style.backgroundColor = rgbArrayToCss(newCentroid[0]);
 document.getElementById("c2").style.backgroundColor = rgbArrayToCss(newCentroid[1]);
