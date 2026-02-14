@@ -29,6 +29,7 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
   attribution: 'Google Satellite', maxZoom: 19
 }).addTo(map);
 map.on('click', async function(click) {
+try {
 var zoom = map.getZoom(); /*zoom,tileX,tileY converts from latitude/longitude to use when getting small image of place*/
 var latLng = click.latlng; /* latlng (latitude/longitude) and point gets the place the user wants to turn into colour palette*/
 var point = map.project(latLng, zoom); 
@@ -174,13 +175,18 @@ document.getElementById("c3").style.backgroundColor = labArrayToCss(LABcentroids
 document.getElementById("c4").style.backgroundColor = labArrayToCss(LABcentroids[3]);
 document.getElementById("c5").style.backgroundColor = labArrayToCss(LABcentroids[4]);
 }
+
+catch (err) {
+   console.log(err);
+}}
 )
 async function urltouint8array(url) { /*turn image url to int8 array*/
   const response = await axios.get(url, {
     responseType: 'arraybuffer'
   });
   return new Uint8Array(response.data);
-}
+} 
+
 </script>
 </body>
 </html>
